@@ -3,14 +3,20 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
 
   <title>QuickQR</title>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
   <style>
+
     body {
+
       margin: 0;
       padding: 0;
 
@@ -19,16 +25,19 @@
       background: #f4f6f8;
 
       display: flex;
+
       justify-content: center;
       align-items: center;
 
-      height: 100vh;
+      min-height: 100vh;
     }
 
     .card {
+
       background: white;
 
       width: 350px;
+      max-width: 90vw;
 
       padding: 30px;
 
@@ -37,6 +46,8 @@
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
 
       text-align: center;
+
+      overflow: hidden;
     }
 
     h1 {
@@ -44,13 +55,16 @@
     }
 
     p {
+
       color: gray;
+
       font-size: 14px;
 
       margin-bottom: 20px;
     }
 
     input[type="text"] {
+
       width: 100%;
 
       padding: 12px;
@@ -58,6 +72,7 @@
       font-size: 16px;
 
       border: 1px solid #ddd;
+
       border-radius: 10px;
 
       box-sizing: border-box;
@@ -76,7 +91,11 @@
     }
 
     #qr {
+
       margin-top: 25px;
+
+      max-width: 100%;
+      height: auto;
     }
 
     button {
@@ -88,9 +107,11 @@
       padding: 12px;
 
       border: none;
+
       border-radius: 10px;
 
       background: black;
+
       color: white;
 
       font-size: 16px;
@@ -103,6 +124,7 @@
     button:hover {
       opacity: 0.85;
     }
+
   </style>
 </head>
 
@@ -123,6 +145,7 @@
     <br><br>
 
     <label>QR Color</label>
+
     <br>
 
     <input
@@ -134,6 +157,7 @@
     <br><br>
 
     <label>QR Size</label>
+
     <br>
 
     <select id="sizePicker">
@@ -183,13 +207,13 @@
       generateQR
     );
 
-    // Update color live
+    // Update QR color live
     colorPicker.addEventListener(
       "input",
       generateQR
     );
 
-    // Update size live
+    // Update QR size live
     sizePicker.addEventListener(
       "change",
       generateQR
@@ -200,7 +224,7 @@
 
       const text = input.value;
 
-      // Clear QR if input empty
+      // Clear QR if empty
       if (!text) {
 
         const ctx =
@@ -217,8 +241,11 @@
       }
 
       QRCode.toCanvas(
+
         canvas,
+
         text,
+
         {
 
           width: parseInt(
@@ -242,16 +269,19 @@
           }
 
         }
+
       );
     }
 
 
+    // Download QR
     function downloadQR() {
 
       const link =
         document.createElement("a");
 
-      link.download = "qr-code.png";
+      link.download =
+        "qr-code.png";
 
       link.href =
         canvas.toDataURL();
