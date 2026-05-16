@@ -1,52 +1,150 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>Simple QR Generator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>QuickQR</title>
+
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
   <style>
     body {
-      font-family: Arial;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      height: 100vh;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+
+      width: 350px;
       text-align: center;
-      margin-top: 50px;
     }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: gray;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
     input {
-      width: 300px;
-      padding: 10px;
+      width: 100%;
+      padding: 12px;
       font-size: 16px;
+
+      border: 1px solid #ddd;
+      border-radius: 10px;
+
+      box-sizing: border-box;
     }
+
+    #qr {
+      margin-top: 25px;
+    }
+
     button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-    canvas {
       margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+
+      border: none;
+      border-radius: 10px;
+
+      background: black;
+      color: white;
+
+      font-size: 16px;
+      cursor: pointer;
+
+      transition: 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.85;
     }
   </style>
 </head>
 
 <body>
 
-<h2>Free QR Code Generator  🚀</h2>
+  <div class="card">
 
-<input id="text" placeholder="Enter link or text">
-<br>
-<button onclick="generateQR()">Generate QR</button>
+    <h1>QuickQR 🚀</h1>
 
-<br>
-<canvas id="qr"></canvas>
+    <p>Generate QR codes instantly</p>
 
-<script>
-function generateQR() {
-  const text = document.getElementById("text").value;
-  const canvas = document.getElementById("qr");
+    <input
+      type="text"
+      id="text"
+      placeholder="Enter text or link"
+    />
 
-  QRCode.toCanvas(canvas, text, function (error) {
-    if (error) console.error(error);
-  });
-}
-</script>
+    <canvas id="qr"></canvas>
+
+    <button onclick="downloadQR()">
+      Download QR
+    </button>
+
+  </div>
+
+  <script>
+
+    const input = document.getElementById("text");
+    const canvas = document.getElementById("qr");
+
+    // Generate QR automatically while typing
+    input.addEventListener("input", generateQR);
+
+    function generateQR() {
+
+      const text = input.value;
+
+      if (!text) {
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        return;
+      }
+
+      QRCode.toCanvas(canvas, text, {
+        width: 220
+      }, function (error) {
+
+        if (error) {
+          console.error(error);
+        }
+
+      });
+    }
+
+    // Download QR image
+    function downloadQR() {
+
+      const link = document.createElement("a");
+
+      link.download = "qr-code.png";
+
+      link.href = canvas.toDataURL();
+
+      link.click();
+    }
+
+  </script>
 
 </body>
 </html>
