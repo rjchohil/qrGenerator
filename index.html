@@ -13,7 +13,9 @@
     body {
       margin: 0;
       padding: 0;
+
       font-family: Arial, sans-serif;
+
       background: #f4f6f8;
 
       display: flex;
@@ -25,11 +27,15 @@
 
     .card {
       background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
 
       width: 350px;
+
+      padding: 30px;
+
+      border-radius: 20px;
+
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+
       text-align: center;
     }
 
@@ -40,12 +46,15 @@
     p {
       color: gray;
       font-size: 14px;
+
       margin-bottom: 20px;
     }
 
-    input {
+    input[type="text"] {
       width: 100%;
+
       padding: 12px;
+
       font-size: 16px;
 
       border: 1px solid #ddd;
@@ -54,13 +63,28 @@
       box-sizing: border-box;
     }
 
+    select,
+    input[type="color"] {
+
+      margin-top: 8px;
+
+      padding: 8px;
+
+      border-radius: 8px;
+
+      border: 1px solid #ddd;
+    }
+
     #qr {
       margin-top: 25px;
     }
 
     button {
-      margin-top: 20px;
+
       width: 100%;
+
+      margin-top: 20px;
+
       padding: 12px;
 
       border: none;
@@ -70,6 +94,7 @@
       color: white;
 
       font-size: 16px;
+
       cursor: pointer;
 
       transition: 0.2s;
@@ -95,6 +120,40 @@
       placeholder="Enter text or link"
     />
 
+    <br><br>
+
+    <label>QR Color</label>
+    <br>
+
+    <input
+      type="color"
+      id="colorPicker"
+      value="#000000"
+    />
+
+    <br><br>
+
+    <label>QR Size</label>
+    <br>
+
+    <select id="sizePicker">
+
+      <option value="150">
+        Small
+      </option>
+
+      <option value="220" selected>
+        Medium
+      </option>
+
+      <option value="300">
+        Large
+      </option>
+
+    </select>
+
+    <br>
+
     <canvas id="qr"></canvas>
 
     <button onclick="downloadQR()">
@@ -105,41 +164,97 @@
 
   <script>
 
-    const input = document.getElementById("text");
-    const canvas = document.getElementById("qr");
+    const input =
+      document.getElementById("text");
 
-    // Generate QR automatically while typing
-    input.addEventListener("input", generateQR);
+    const canvas =
+      document.getElementById("qr");
+
+    const colorPicker =
+      document.getElementById("colorPicker");
+
+    const sizePicker =
+      document.getElementById("sizePicker");
+
+
+    // Auto-generate while typing
+    input.addEventListener(
+      "input",
+      generateQR
+    );
+
+    // Update color live
+    colorPicker.addEventListener(
+      "input",
+      generateQR
+    );
+
+    // Update size live
+    sizePicker.addEventListener(
+      "change",
+      generateQR
+    );
+
 
     function generateQR() {
 
       const text = input.value;
 
+      // Clear QR if input empty
       if (!text) {
-        const ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const ctx =
+          canvas.getContext("2d");
+
+        ctx.clearRect(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+
         return;
       }
 
-      QRCode.toCanvas(canvas, text, {
-        width: 220
-      }, function (error) {
+      QRCode.toCanvas(
+        canvas,
+        text,
+        {
 
-        if (error) {
-          console.error(error);
+          width: parseInt(
+            sizePicker.value
+          ),
+
+          color: {
+
+            dark:
+              colorPicker.value,
+
+            light: "#ffffff"
+          }
+
+        },
+
+        function (error) {
+
+          if (error) {
+            console.error(error);
+          }
+
         }
-
-      });
+      );
     }
 
-    // Download QR image
+
     function downloadQR() {
 
-      const link = document.createElement("a");
+      const link =
+        document.createElement("a");
 
       link.download = "qr-code.png";
 
-      link.href = canvas.toDataURL();
+      link.href =
+        canvas.toDataURL();
 
       link.click();
     }
@@ -147,4 +262,5 @@
   </script>
 
 </body>
+
 </html>
